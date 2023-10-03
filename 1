@@ -1,0 +1,82 @@
+echo "# UNO2" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Komogorov/UNO2.git
+git push -u origin main
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UN Reorganization</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+  <div id="container" style="background-color: #00008B;">
+  <h1>UN Reorganization Experiment</h1>
+  <p>This experiment is designed to allow users to create their own proposals for the reorganization of the United Nations.</p>
+  <p>The experiment is relevant because the United Nations is a global organization that has been in need of reform for many years.</p>
+  <p>The experiment is dependent on the opinions of the users who participate in it. The results of the experiment will reflect the collective opinion of the users.</p>
+  <script>
+    // Create a D3 selection for the container element
+    var container = d3.select("#container");
+
+    // Create a 10x10 grid of squares
+    var squares = container.selectAll(".square")
+      .data(Array(100))
+      .enter().append("div")
+      .attr("class", "square")
+      .attr("x", function(d, i) { return i % 10 * 100; })
+      .attr("y", function(d, i) { return Math.floor(i / 10) * 100; })
+      .attr("width", 100)
+      .attr("height", 100)
+      .style("color", "gold");
+
+    // Add text to each square
+    squares.text(function(d, i) { return i; });
+
+    // Add a click event handler to each square
+    squares.on("click", function(d, i) {
+      // Get the current value of the square
+      var value = squares.filter(function(d) { return d.id === i; }).text();
+
+      // Update the value of the square
+      squares.filter(function(d) { return d.id === i; }).text("1");
+
+      // Update the value of all other squares
+      squares.filter(function(d) { return d.id !== i; }).text("0");
+    });
+
+    // Add a vote button
+    container.append("button")
+      .text("Vote")
+      .on("click", function() {
+        // Get the values of all squares
+        var values = squares.map(function(d) { return d.text(); });
+
+        // Calculate the total vote count for each value
+        var counts = values.reduce(function(counts, value) {
+          if (counts[value] === undefined) {
+            counts[value] = 0;
+          }
+          counts[value]++;
+          return counts;
+        }, {});
+
+        // Display the vote counts
+        for (var key in counts) {
+          container.append("p")
+            .text(key + ": " + counts[key]);
+        }
+      });
+
+    // Add the existing UN structure
+    var existingStructure = [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, // Security Council
+      11, 12, 13, 14, 15, 16, 17, 18, 19, 20, // Economic and Social Council
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, // Trusteeship Council
+      31, 32, 33, 34, 35, 36, 37, 38, 39, 40, // General Assembly
+      41, 42, 43, 44, 45, 46, 47, 48, 49, 50, // Secretariat
+      51, 52, 53, 54, 55, 56,
